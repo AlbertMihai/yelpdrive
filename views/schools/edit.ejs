@@ -1,0 +1,66 @@
+<% layout('layout/boilerplate')%>
+    <div class="row">
+        <h1 class="text-center">Edit Driving School</h1>
+        <div class="col-6 offset-3">
+            <form action="/schools/<%=school._id%>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="school[title]" value="<%=school.title%>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="school[location]" value="<%=school.location%>" required>
+                </div>
+                <div class="mb-3">
+                  <label for="formFileMultiple" class="form-label">Select image(s)</label>
+                  <input class="form-control" type="file" id="formFileMultiple" name="image" multiple>
+                </div>
+                <div class="mb3">
+                    <label for="price">Price</label>
+                    <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" id= "price" class="form-control" aria-label="price" name="school[price]" value="<%=school.price%>" required>
+                  </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="school[description]" required><%=school.description%></textarea>
+                </div>
+                <div class="mb-3">
+                  <% school.image.forEach((img, i) => { %>
+                    <img src="<%=img.path%>" class="image-thumbnail img-fluid" alt="">
+                    <div class="form-check-inline">
+                      <input type="checkbox" id="image<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                      <label for="image<%=i%>">Delete?</label>
+                    </div>
+                  <%}) %> 
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-info text-decoration-color-white">UPDATE DRIVING SCHOOL</button>
+                </div>
+            </form>
+            <a href="/schools">GO BACK</a>
+        </div>
+    </div>
+    <script>
+        (() => {
+      'use strict'
+    
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.validated-form')
+    
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+    
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+    </script>
+    
+

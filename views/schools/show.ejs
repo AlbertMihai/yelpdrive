@@ -1,0 +1,117 @@
+<% layout('layout/boilerplate')%>
+<link rel="stylesheet" href="/stylesheets/stars.css">
+<div class="row">
+    <div class="col-6">
+      <div id="schoolCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <% school.image.forEach((img, i) => {%> 
+            <div class="carousel-item <%= i===0 ? 'active' : ''%>">
+              <img src="<%=img.path%>" class="d-block w-100" alt="...">
+            </div>
+          <% })%>
+        </div>
+        <% if (school.image.length > 1) {%> 
+        <button class="carousel-control-prev" type="button" data-bs-target="#schoolCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#schoolCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <% } %> 
+      </div>
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%=school.title%></h5>
+              <h6 class="card-text">Submited by: <%=school.author.username%></h6>
+              <p class="card-text"><%=school.description%></p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item text-muted"><%=school.location%></li>
+              <li class="list-group-item"><%=school.price%>RON</li>
+            </ul>
+            <% if (currentUser && school.author._id.equals(currentUser._id)) {%> 
+            <div class="card-body">
+              <a href="/schools/<%=school._id%>/edit" class="card-link btn btn-info">EDIT</a>
+              <form class="d-inline" action="/schools/<%=school._id%>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">DELETE</button>
+              </form>
+            </div>
+            <% } %> 
+          </div>
+    </div>
+    <div class="col-6">
+      <div class="row h-50">
+        <div id="map" class="w-100 h-100"></div>
+      </div>
+      <div class="row h-50 mt-3">
+        <% if (currentUser) { %> 
+        <h2>Leave a Review</h2>
+            <form class="mb-3 validated-form" novalidate action="/schools/<%=school._id%>/reviews" method="POST">
+              <div class="mb-3">
+                <fieldset class="starability-basic">
+                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked/>
+                  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                  <label for="first-rate1" title="Terrible">1 star</label>
+                  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                  <label for="first-rate2" title="Not good">2 stars</label>
+                  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                  <label for="first-rate3" title="Average">3 stars</label>
+                  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                  <label for="first-rate4" title="Very good">4 stars</label>
+                  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                  <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="body">Review</label>
+                <textarea class="form-control" name="review[body]" id="body" cols="30" row="10" required></textarea>
+                <div class="valid-feedback">
+                  Looks good!
+              </div>
+              </div>
+              <button class="btn btn-success">Submit</button>
+            </form>
+            <% } %> 
+            <% for(let review of school.reviews) {%>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title"><%=review.author.username%></h5>
+                  <p class="starability-result" data-rating="<%=review.rating%>">Rated: <%=review.rating%> stars</p>
+                  <p class="card-text">Review: <%=review.body%></p>
+                  <% if (currentUser && review.author.equals(currentUser._id)) {%> 
+                  <form action="/schools/<%=school._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </form>
+                  <% } %> 
+                </div>
+              </div>
+            <% }%>
+          </div>
+     </div>
+</div>
+<script>
+  (() => {
+'use strict'
+
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+const forms = document.querySelectorAll('.validated-form')
+
+// Loop over them and prevent submission
+Array.from(forms).forEach(form => {
+  form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    form.classList.add('was-validated')
+  }, false)
+})
+})()
+</script>
+<script>
+  const school = <%- JSON.stringify(school) %>;
+</script>
+<script src="/javascripts/showmap.js"></script>

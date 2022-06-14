@@ -1,0 +1,23 @@
+<% layout('layout/boilerplate')%>
+  <div id="map" style="width:100%; height: 500px;"></div>
+    <h1>ALL SCHOOLS</h1>
+        <% for (let c of schools) { %>
+            <div class="card d-flex flex-row align-items-center mb-3" style="width: 70rem; height: 15rem;">
+                <div class="col-md-4">
+                <% if (c.image.length) {%> 
+                <img src=<%=c.image[0].path%> class="img-fluid" alt="...">
+                <% } %> 
+                </div>
+                <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title"><%=c.title%></h5>
+                  <p class="card-text"><%=c.description%></p>
+                  <a href="/schools/<%=c._id%>" class="btn btn-primary">View <%=c.title%></a>
+                </div>
+                </div>
+              </div>
+        <%} %>
+<script>
+  const schools = {features: <%- JSON.stringify(schools)%>};
+</script>
+<script src="/javascripts/clustermap.js"></script>

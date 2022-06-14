@@ -1,0 +1,84 @@
+<% layout('layout/boilerplate')%>
+    <div class="row">
+        <h1 class="text-center">New Driving School</h1>
+        <div class="col-6 offset-3">
+            <form action="/schools" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="school[title]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="school[location]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="formFileMultiple" class="form-label">Select image(s)</label>
+                    <input class="form-control" type="file" id="formFileMultiple" name="image" multiple>
+                  </div>
+                <!-- <div class="mb-3">
+                    <label class="form-label" for="image">Image Url</label>
+                    <input class="form-control" type="text" id="image" name="school[image]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div> -->
+                <div class="mb3">
+                    <label for="price">Price</label>
+                    <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" id= "price" class="form-control" aria-label="price" name="school[price]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="school[description]" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">ADD DRIVING SCHOOL</button>
+                </div>
+            </form>
+            <a href="/schools">GO BACK</a>
+        </div>
+    </div>
+<script>
+    (() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.validated-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYWxiZXJ0bWloYWkiLCJhIjoiY2w0Y2s5dnV1MDAxczNoczRzemkzbzNnaSJ9.yjTPqV4V2khQupy-nciHbw';
+    const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+    center: school.geometry.coordinates, // starting position [lng, lat]
+    zoom: 9 // starting zoom
+});
+
+new mapboxgl.Marker()
+.setLngLat([-74.5, 40])
+.addTo(map)
+</script>
